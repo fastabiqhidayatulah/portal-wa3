@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirim Media - Portal WA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        .nav-link { @apply px-4 py-2 text-sm rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-800 transition-all font-medium; }
+        .nav-link.active { @apply bg-teal-50 text-teal-700 font-semibold border border-teal-200/50 shadow-sm shadow-teal-500/5; }
+        .card { @apply bg-white p-6 rounded-2xl border border-slate-200/70 shadow-sm; }
+        .form-input { @apply mt-1.5 w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500/10 focus:border-teal-500 transition duration-200 bg-slate-50/50 text-sm; }
+    </style>
+</head>
+<body class="bg-slate-50/50 text-slate-700 min-h-screen">
+    <header class="bg-white/80 backdrop-blur-lg border-b border-slate-200/80 sticky top-0 z-10">
+        <nav class="container mx-auto px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                 <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-600 to-emerald-500 flex items-center justify-center shadow-md shadow-teal-600/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-800 leading-none">Portal WA</h1>
+                    <p class="text-[10px] text-teal-600 font-semibold uppercase tracking-wider mt-1">Nusa Edition</p>
+                </div>
+            </div>
+            <div class="flex items-center flex-wrap justify-center gap-1.5">
+                <a href="/" class="nav-link">Utama</a>
+                <a href="/validator.html" class="nav-link">Validator</a>
+                <a href="/send.html" class="nav-link active">Kirim</a>
+                <a href="/docs.html" class="nav-link">Docs</a>
+                <a href="/settings.html" class="nav-link">Pengaturan</a>
+                <a href="/logout" class="px-4 py-2 text-sm rounded-lg font-semibold bg-red-50 text-red-600 hover:bg-red-100 transition-all ml-2">Logout</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-8 max-w-4xl">
+        <div class="card relative overflow-hidden bg-white">
+            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-teal-500 to-emerald-400"></div>
+            
+            <div class="mb-6">
+                <h2 class="text-xl font-bold text-slate-800">Kirim Media & Dokumen</h2>
+                <p class="text-sm text-slate-500 mt-1">Kirim foto, video, audio, atau dokumen penting langsung ke nomor personal ataupun grup yang terdaftar.</p>
+            </div>
+
+            <form id="mediaForm" class="space-y-6">
+                <!-- Row 1: Target Contacts -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Nomor Tujuan Personal</label>
+                        <input type="text" id="personalTargets" placeholder="Contoh: 08123456789, 08987654321" class="form-input">
+                        <p class="text-[11px] text-slate-400 mt-1.5">Pisahkan beberapa nomor dengan koma. Mendukung format lokal.</p>
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pilih Grup Tujuan</label>
+                        <select id="groupSelect" class="form-input">
+                            <option value="">-- Pilih Grup (opsional) --</option>
+                        </select>
+                        <p class="text-[11px] text-slate-400 mt-1.5">Kirim media langsung ke salah satu grup tempat bot bergabung.</p>
+                    </div>
+                </div>
+
+                <!-- Caption -->
+                <div>
+                    <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Caption / Pesan Penyerta</label>
+                    <input type="text" id="caption" class="form-input" placeholder="Tulis caption atau pesan deskripsi file disini (opsional)...">
+                </div>
+
+                <!-- Method selection divider -->
+                <div class="relative py-2">
+                    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                        <div class="w-full border-t border-slate-100"></div>
+                    </div>
+                    <div class="relative flex justify-center text-xs uppercase">
+                        <span class="bg-white px-3 font-semibold text-slate-400">Pilih Metode Berkas</span>
+                    </div>
+                </div>
+
+                <!-- Input File & URL methods side-by-side or stacked -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Method A: File Upload -->
+                    <div class="p-5 bg-slate-50/50 rounded-2xl border border-slate-200/50 flex flex-col justify-between">
+                        <div>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-700 mb-3 border border-teal-100">Metode A</span>
+                            <h3 class="text-sm font-bold text-slate-800 mb-1">Upload File Lokal</h3>
+                            <p class="text-xs text-slate-500 mb-4">Pilih dan unggah file dari penyimpanan perangkat Anda.</p>
+                        </div>
+                        <div class="mt-2">
+                            <input type="file" id="fileInput" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100 transition-all cursor-pointer">
+                        </div>
+                    </div>
+
+                    <!-- Method B: URL input -->
+                    <div class="p-5 bg-slate-50/50 rounded-2xl border border-slate-200/50 flex flex-col justify-between">
+                        <div>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 mb-3 border border-emerald-100">Metode B</span>
+                            <h3 class="text-sm font-bold text-slate-800 mb-1">Gunakan Link / URL</h3>
+                            <p class="text-xs text-slate-500 mb-4">Masukkan tautan langsung (direct link) file dari internet.</p>
+                        </div>
+                        <div>
+                            <input type="text" id="urlInput" placeholder="https://example.com/assets/banner.jpg" class="form-input mt-0">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback status panel -->
+                <div id="status-container" class="hidden p-4 rounded-xl border">
+                    <p id="status" class="text-sm font-medium"></p>
+                </div>
+
+                <!-- Buttons actions -->
+                <div class="flex flex-col sm:flex-row justify-end items-center gap-3 pt-4 border-t border-slate-100">
+                    <button type="button" id="sendFileBtn" class="w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-sm bg-slate-950 text-white hover:bg-slate-800 transition-all shadow-md flex items-center justify-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        <span>Kirim File Lokal</span>
+                    </button>
+                    <button type="button" id="sendUrlBtn" class="w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-sm bg-teal-600 hover:bg-teal-700 text-white transition-all shadow-md flex items-center justify-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a1 1 0 00-1.414 1.414l1.5 1.5a4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0z" clip-rule="evenodd" />
+                        </svg>
+                        <span>Kirim via URL</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+    async function fetchGroups() {
+        try {
+            const res = await fetch('/api/internal/get-groups', { credentials: 'include' });
+            if (!res.ok) return; 
+            const groups = await res.json();
+            const sel = document.getElementById('groupSelect');
+            sel.innerHTML = '<option value="">-- Pilih Grup (opsional) --</option>';
+            groups.forEach(g => { const o = document.createElement('option'); o.value = g.id; o.textContent = g.subject; sel.appendChild(o); });
+        } catch (e) { console.error(e); }
+    }
+
+    const showStatus = (message, isError = false) => {
+        const container = document.getElementById('status-container');
+        const text = document.getElementById('status');
+        text.textContent = message;
+        if (isError) {
+            container.className = 'p-4 rounded-xl border border-rose-100 bg-rose-50 text-rose-700';
+        } else {
+            container.className = 'p-4 rounded-xl border border-teal-100 bg-teal-50 text-teal-700';
+        }
+        container.classList.remove('hidden');
+    };
+
+    document.getElementById('sendFileBtn').addEventListener('click', async () => {
+        const personalTargets = document.getElementById('personalTargets').value.trim();
+        const groupId = document.getElementById('groupSelect').value;
+        const caption = document.getElementById('caption').value;
+        const fileEl = document.getElementById('fileInput');
+        
+        if (!fileEl.files.length) { 
+            showStatus('Pilih file lokal terlebih dahulu untuk dikirim.', true); 
+            return; 
+        }
+
+        const form = new FormData();
+        form.append('file', fileEl.files[0]);
+        if (personalTargets) form.append('personalTargets', personalTargets);
+        if (groupId) form.append('groupId', groupId);
+        if (caption) form.append('caption', caption);
+
+        showStatus('Sedang mengirim berkas lokal...');
+        try {
+            const res = await fetch('/api/internal/send-media', { method: 'POST', body: form, credentials: 'include' });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Gagal mengirim berkas.');
+            showStatus(data.message || 'Berkas berhasil terkirim ke target.', false);
+        } catch (e) { showStatus('Gagal: ' + e.message, true); }
+    });
+
+    document.getElementById('sendUrlBtn').addEventListener('click', async () => {
+        const personalTargets = document.getElementById('personalTargets').value.trim();
+        const groupId = document.getElementById('groupSelect').value;
+        const caption = document.getElementById('caption').value;
+        const url = document.getElementById('urlInput').value.trim();
+        
+        if (!url) { 
+            showStatus('Masukkan alamat URL berkas terlebih dahulu.', true); 
+            return; 
+        }
+
+        showStatus('Sedang mengirim berkas dari tautan web...');
+        try {
+            const res = await fetch('/api/internal/send-media-url', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ personalTargets, groupId, url, caption }), credentials: 'include' });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Gagal mengirim tautan.');
+            showStatus(data.message || 'Berkas via URL berhasil terkirim ke target.', false);
+        } catch (e) { showStatus('Gagal: ' + e.message, true); }
+    });
+
+    fetchGroups();
+    </script>
+</body>
+</html>

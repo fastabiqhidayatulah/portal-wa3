@@ -1,0 +1,20 @@
+﻿git : fatal: not a git repository (or any of the parent 
+directories): .git
+At line:1 char:1
++ git rev-parse --is-inside-work-tree > git_check_output.txt 2>&1 
+; git ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: not a gi...ect 
+   ories): .git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+git : fatal: not a git repository (or any of the parent 
+directories): .git
+At line:1 char:67
++ ... _output.txt 2>&1 ; git remote -v >> git_check_output.txt 
+2>&1 ; type  ...
++                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: not a gi...ect 
+   ories): .git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

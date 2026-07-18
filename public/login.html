@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Portal WA Dashboard</title>
+    <!-- Memuat Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Memuat Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50/60 text-slate-700">
+
+    <!-- Kontainer Utama untuk menengahkan kartu login -->
+    <div class="min-h-screen flex items-center justify-center p-4">
+        
+        <!-- Kartu Login -->
+        <div class="bg-white w-full max-w-md p-10 rounded-3xl border border-slate-200/80 shadow-xl relative overflow-hidden transition-all duration-300 hover:border-teal-200">
+            <!-- Header Kartu: Ikon dan Judul -->
+            <div class="flex flex-col items-center mb-8">
+                <!-- Ikon Lingkaran dengan Gradien -->
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-600 to-emerald-500 flex items-center justify-center mb-4 shadow-lg shadow-teal-600/20">
+                    <!-- Ikon Chat Bubble (SVG) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                </div>
+                <h1 class="text-2xl font-bold text-slate-800 tracking-tight">Portal WA</h1>
+                <p class="text-slate-400 text-xs mt-1 font-semibold uppercase tracking-wider">Dashboard Login</p>
+            </div>
+
+            <!-- Form Login -->
+            <form id="loginForm" class="space-y-5">
+                <div>
+                    <label for="username" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Username</label>
+                    <div class="relative mt-1.5">
+                        <input type="text" id="username" name="username" placeholder="Masukkan username" required
+                               class="w-full p-3.5 pl-4 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition duration-200 bg-slate-50/50">
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between items-center">
+                        <label for="password" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Password</label>
+                    </div>
+                    <div class="relative mt-1.5">
+                        <input type="password" id="password" name="password" placeholder="Masukkan password" required
+                               class="w-full p-3.5 pl-4 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition duration-200 bg-slate-50/50">
+                    </div>
+                </div>
+                
+                <!-- Pesan Error (akan muncul jika login gagal) -->
+                <p id="error-message" class="text-rose-500 text-sm text-center font-medium min-h-[20px]"></p>
+
+                <div class="pt-2">
+                    <button type="submit" 
+                            class="w-full bg-slate-900 hover:bg-slate-800 text-white p-3.5 rounded-xl font-semibold transition-all duration-200 shadow-md flex items-center justify-center space-x-2">
+                        <span>Masuk ke Dashboard</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Footer Kartu: Info Kredensial Default -->
+            <div class="text-center mt-8 pt-6 border-t border-slate-100">
+                <p class="text-xs text-slate-400 font-medium">Kredensial Default:</p>
+                <div class="mt-2 inline-flex items-center space-x-1.5 px-3 py-1 bg-slate-50 border border-slate-100 rounded-lg text-xs text-slate-600 font-mono">
+                    <span class="font-semibold text-slate-800">admin</span>
+                    <span class="text-slate-300">/</span>
+                    <span>password123</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = e.target.username.value;
+            const password = e.target.password.value;
+            const errorMessageEl = document.getElementById('error-message');
+            
+            errorMessageEl.textContent = '';
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (response.ok) {
+                    window.location.href = '/';
+                } else {
+                    const data = await response.json();
+                    errorMessageEl.textContent = data.message || 'Terjadi kesalahan.';
+                }
+            } catch (error) {
+                errorMessageEl.textContent = 'Tidak dapat terhubung ke server.';
+                console.error('Login error:', error);
+            }
+        });
+    </script>
+
+</body>
+</html>

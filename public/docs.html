@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>API Docs - Portal WA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        .nav-link { @apply px-4 py-2 text-sm rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-800 transition-all font-medium; }
+        .nav-link.active { @apply bg-teal-50 text-teal-700 font-semibold border border-teal-200/50 shadow-sm shadow-teal-500/5; }
+        .card { @apply bg-white p-8 rounded-2xl border border-slate-200/70 shadow-sm; }
+        pre, code { font-family: 'JetBrains Mono', monospace; }
+        pre { @apply bg-slate-900 text-slate-300 p-5 rounded-xl text-xs overflow-x-auto leading-relaxed border border-slate-800/80; }
+        .method-badge { @apply text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider border; }
+        .method-get { @apply bg-teal-50 text-teal-700 border-teal-200/50; }
+        .method-post { @apply bg-emerald-50 text-emerald-700 border-emerald-200/50; }
+    </style>
+</head>
+<body class="bg-slate-50/50 text-slate-700 min-h-screen">
+    <header class="bg-white/80 backdrop-blur-lg border-b border-slate-200/80 sticky top-0 z-10">
+        <nav class="container mx-auto px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                 <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-600 to-emerald-500 flex items-center justify-center shadow-md shadow-teal-600/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-800 leading-none">Portal WA</h1>
+                    <p class="text-[10px] text-teal-600 font-semibold uppercase tracking-wider mt-1">Nusa Edition</p>
+                </div>
+            </div>
+            <div class="flex items-center flex-wrap justify-center gap-1.5">
+                <a href="/" class="nav-link">Utama</a>
+                <a href="/validator.html" class="nav-link">Validator</a>
+                <a href="/send.html" class="nav-link">Kirim</a>
+                <a href="/docs.html" class="nav-link active">Docs</a>
+                <a href="/settings.html" class="nav-link">Pengaturan</a>
+                <a href="/logout" class="px-4 py-2 text-sm rounded-lg font-semibold bg-red-50 text-red-600 hover:bg-red-100 transition-all ml-2">Logout</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-8 max-w-4xl">
+        <div class="card relative overflow-hidden bg-white">
+            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-teal-500 to-emerald-400"></div>
+            
+            <div class="mb-8">
+                <h1 class="text-2xl font-bold text-slate-800">Dokumentasi API Portal WhatsApp</h1>
+                <p class="text-sm text-slate-500 mt-1">Panduan lengkap integrasi, rincian parameter, serta contoh kueri HTTP untuk mengirim pesan teks, berkas media, dan integrasi eksternal.</p>
+            </div>
+
+            <!-- Skema Otentikasi -->
+            <section class="mb-8 pb-6 border-b border-slate-100">
+                <h2 class="text-base font-bold text-slate-800 flex items-center mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-teal-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <span>Skema Otentikasi</span>
+                </h2>
+                <div class="space-y-3 text-sm text-slate-600 leading-relaxed">
+                    <p>Portal menyediakan dua jenis endpoint dengan metode autentikasi yang berbeda sesuai dengan arsitektur sistem Anda:</p>
+                    <ul class="list-disc ml-6 space-y-2">
+                        <li><strong>Endpoint Internal (Dashboard):</strong> Terletak di bawah basis rute <code class="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded text-xs font-mono">/api/internal</code>. Menggunakan otentikasi sesi aktif (Cookie) yang otomatis disimpan ketika Anda melakukan login via dashboard utama.</li>
+                        <li><strong>Endpoint Eksternal (Aplikasi Mandiri):</strong> Menggunakan rute publik <code class="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded text-xs font-mono">/api/external</code>. Memerlukan Header Kunci API yang dilewatkan melalui properti: <code class="bg-teal-50 text-teal-800 border border-teal-100 px-1.5 py-0.5 rounded text-xs font-mono">x-api-key</code> sesuai variabel <code class="font-mono text-xs">EXTERNAL_API_KEY</code> di server.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- API Endpoints List -->
+            <div class="space-y-10">
+
+                <!-- 1. MENGIRIM PESAN TEKS KE PERSONAL -->
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <span class="method-badge method-post">POST</span>
+                        <code class="text-sm font-bold text-slate-800">/api/external/send-message (Personal JID)</code>
+                    </div>
+                    <div class="text-sm text-slate-600 leading-relaxed">
+                        <p class="font-semibold text-slate-800 mb-1">Kasus Penggunaan: Mengirim Pesan Teks ke Nomor WhatsApp Personal</p>
+                        <p>Mengirim pesan teks langsung ke satu nomor ponsel individual. Format nomor akan dinormalisasi secara otomatis (contoh: awalan <code class="bg-slate-50 px-1 rounded text-xs">08xxx</code> akan dikonversi menjadi <code class="bg-slate-50 px-1 rounded text-xs">628xxx</code>).</p>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/50 text-xs text-slate-600 space-y-2">
+                        <p class="font-bold text-slate-700">Payload JSON (Raw):</p>
+                        <ul class="list-disc ml-5 space-y-1">
+                            <li><code class="font-bold text-teal-600 font-mono">targetType</code> (String - Wajib): Set nilainya menjadi <code class="font-mono text-teal-700">"personal"</code></li>
+                            <li><code class="font-bold text-teal-600 font-mono">target</code> (String - Wajib): Nomor telepon tujuan (contoh: <code class="font-mono text-slate-700">"08123456789"</code> atau <code class="font-mono text-slate-700">"628123456789"</code>)</li>
+                            <li><code class="font-bold text-teal-600 font-mono">message</code> (String - Wajib): Isi konten teks pesan Anda. Mendukung karakter baris baru (\n) dan emoji.</li>
+                        </ul>
+                    </div>
+
+                    <p class="text-xs font-bold text-slate-700">Contoh cURL Request:</p>
+                    <pre>curl -X POST http://localhost:3000/api/external/send-message \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: [EXTERNAL_API_KEY_ANDA]" \
+  -d '{
+    "targetType": "personal",
+    "target": "08123456789",
+    "message": "Halo! Ini adalah pesan konfirmasi pesanan dari Portal WA Nusantara.\n\nStatus: Sukses"
+  }'</pre>
+                </div>
+
+                <!-- 2. MENGIRIM PESAN TEKS KE GRUP -->
+                <div class="space-y-4 pt-8 border-t border-slate-100">
+                    <div class="flex items-center space-x-3">
+                        <span class="method-badge method-post">POST</span>
+                        <code class="text-sm font-bold text-slate-800">/api/external/send-message (Grup)</code>
+                    </div>
+                    <div class="text-sm text-slate-600 leading-relaxed">
+                        <p class="font-semibold text-slate-800 mb-1">Kasus Penggunaan: Mengirim Pesan Teks Ke Grup WhatsApp Berdasarkan Nama Grup</p>
+                        <p>Mengirim pesan pengumuman atau notifikasi grup. Server Portal WA akan secara dinamis mencari grup yang sesuai dengan nama subjek grup yang Anda masukkan (tidak sensitif terhadap huruf besar/kecil).</p>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/50 text-xs text-slate-600 space-y-2">
+                        <p class="font-bold text-slate-700">Payload JSON (Raw):</p>
+                        <ul class="list-disc ml-5 space-y-1">
+                            <li><code class="font-bold text-teal-600 font-mono">targetType</code> (String - Wajib): Set nilainya menjadi <code class="font-mono text-teal-700">"group"</code></li>
+                            <li><code class="font-bold text-teal-600 font-mono">target</code> (String - Wajib): Nama subjek grup Anda (contoh: <code class="font-mono text-slate-700">"Grup Alumni Nusa"</code> atau <code class="font-mono text-slate-700">"Dev Team"</code>)</li>
+                            <li><code class="font-bold text-teal-600 font-mono">message</code> (String - Wajib): Konten pesan teks pengumuman.</li>
+                        </ul>
+                    </div>
+
+                    <p class="text-xs font-bold text-slate-700">Contoh cURL Request:</p>
+                    <pre>curl -X POST http://localhost:3000/api/external/send-message \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: [EXTERNAL_API_KEY_ANDA]" \
+  -d '{
+    "targetType": "group",
+    "target": "Dev Team",
+    "message": "[Pemberitahuan Sistem] Deploy server berhasil diselesaikan pada jam 12:00 WIB."
+  }'</pre>
+                </div>
+
+                <!-- 3. MENGIRIM DENGAN FILE ATTACHMENT (UPLOAD LOKAL) -->
+                <div class="space-y-4 pt-8 border-t border-slate-100">
+                    <div class="flex items-center space-x-3">
+                        <span class="method-badge method-post">POST</span>
+                        <code class="text-sm font-bold text-slate-800">/api/internal/send-media (Attachment Lokal)</code>
+                    </div>
+                    <div class="text-sm text-slate-600 leading-relaxed">
+                        <p class="font-semibold text-slate-800 mb-1">Kasus Penggunaan: Mengirim Berkas Dokumen, Gambar, Audio, atau Video yang Tersimpan di Komputer/Server Lokal</p>
+                        <p>Mengunggah file biner langsung ke server portal, yang kemudian diteruskan secara instan oleh bot WhatsApp ke kontak tujuan. Mendukung multi-target personal dan grup secara bersamaan.</p>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/50 text-xs text-slate-600 space-y-2">
+                        <p class="font-bold text-slate-700">Payload Request (Format multipart/form-data):</p>
+                        <ul class="list-disc ml-5 space-y-1">
+                            <li><code class="font-bold text-teal-600 font-mono">file</code> (File - Wajib): File biner media dari disk lokal Anda.</li>
+                            <li><code class="font-bold text-teal-600 font-mono">personalTargets</code> (String - Opsional): Koma sebagai pemisah daftar nomor HP tujuan (contoh: <code class="font-mono">"0812345,0898765"</code>).</li>
+                            <li><code class="font-bold text-teal-600 font-mono">groupId</code> (String - Opsional): ID JID grup (contoh: <code class="font-mono">"12036302@g.us"</code>) ATAU nama grup langsung (contoh: <code class="font-mono">"Dev Team"</code>).</li>
+                            <li><code class="font-bold text-teal-600 font-mono">caption</code> (String - Opsional): Caption untuk lampiran gambar atau video.</li>
+                        </ul>
+                    </div>
+
+                    <p class="text-xs font-bold text-slate-700">Contoh cURL Request (Upload Gambar/Dokumen):</p>
+                    <pre>curl -X POST http://localhost:3000/api/internal/send-media \
+  -F "file=@/home/user/document/laporan_penjualan.pdf" \
+  -F "personalTargets=081234567890" \
+  -F "caption=Berikut lampiran laporan bulanan kami" \
+  -b cookie.txt</pre>
+                </div>
+
+                <!-- 4. MENGIRIM FILE ATTACHMENT VIA LINK / URL -->
+                <div class="space-y-4 pt-8 border-t border-slate-100">
+                    <div class="flex items-center space-x-3">
+                        <span class="method-badge method-post">POST</span>
+                        <code class="text-sm font-bold text-slate-800">/api/internal/send-media-url (Attachment URL)</code>
+                    </div>
+                    <div class="text-sm text-slate-600 leading-relaxed">
+                        <p class="font-semibold text-slate-800 mb-1">Kasus Penggunaan: Mengirim Media Menggunakan Direct Link Internet</p>
+                        <p>Mengirimkan gambar, video, musik, atau dokumen PDF yang sudah terunggah di hosting cloud publik. Server akan melakukan streaming berkas dan mengirimkannya sebagai objek media asli di obrolan chat WhatsApp target Anda.</p>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/50 text-xs text-slate-600 space-y-2">
+                        <p class="font-bold text-slate-700">Payload JSON (Raw):</p>
+                        <ul class="list-disc ml-5 space-y-1">
+                            <li><code class="font-bold text-teal-600 font-mono">url</code> (String - Wajib): Tautan langsung berkas (direct link) di internet (contoh: <code class="font-mono">"https://website.com/brosur.jpg"</code>).</li>
+                            <li><code class="font-bold text-teal-600 font-mono">personalTargets</code> (String - Opsional): Koma sebagai pemisah daftar nomor HP tujuan.</li>
+                            <li><code class="font-bold text-teal-600 font-mono">groupId</code> (String - Opsional): ID JID grup atau nama grup tujuan.</li>
+                            <li><code class="font-bold text-teal-600 font-mono">caption</code> (String - Opsional): Teks penyerta berkas media.</li>
+                        </ul>
+                    </div>
+
+                    <p class="text-xs font-bold text-slate-700">Contoh cURL Request (Kirim Media via URL):</p>
+                    <pre>curl -X POST http://localhost:3000/api/internal/send-media-url \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://images.unsplash.com/photo-1579202673506-ca3ce28943ef?w=500",
+    "personalTargets": "081234567890",
+    "caption": "Selamat pagi! Silakan tinjau poster promosi terbaru kami."
+  }' \
+  -b cookie.txt</pre>
+                </div>
+
+                <!-- Tips & Best Practices -->
+                <div class="pt-8 border-t border-slate-100 space-y-3">
+                    <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider">Tips Format Data & Batasan</h3>
+                    <ul class="list-disc ml-5 text-sm text-slate-600 space-y-2 leading-relaxed">
+                        <li><strong>Throttling Anti-Spam:</strong> Untuk mencegah nomor WhatsApp Anda diblokir, disarankan memberikan jeda (delay) minimal 3-5 detik antara setiap pemanggilan API jika mengirimkan pesan secara masal.</li>
+                        <li><strong>Identifikasi Otomatis Berkas:</strong> Saat menggunakan metode URL, server Portal WA secara cerdas mendeteksi format berkas melalui ekstensi nama file (.jpg, .png, .mp4, .pdf) untuk menentukan jenis payload yang dikirimkan.</li>
+                        <li><strong>Keamanan Sesi:</strong> Endpoint bertanda <code class="bg-slate-50 px-1 py-0.5 rounded text-xs">/api/internal/*</code> memerlukan header cookie dari autentikasi login browser Anda, atau gunakan <code class="bg-slate-50 px-1 py-0.5 rounded text-xs">/api/external/*</code> untuk diintegrasikan secara langsung dari sistem eksternal Anda.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</body>
+</html>

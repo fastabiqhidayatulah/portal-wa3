@@ -1,0 +1,8 @@
+{
+  "name": "Portal WhatsApp Bot",
+  "description": "A web-based control panel and WhatsApp bot manager with Gemini AI integration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "name": "wa-baileys-v2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "scripts": {
+    "dev": "node bot.js",
+    "build": "echo 'No build step required'",
+    "start": "node bot.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/genai": "*",
+    "@whiskeysockets/baileys": "^6.7.20",
+    "baileys": "^6.7.20",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^2.2.0",
+    "dotenv": "^17.0.0",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "googleapis": "^150.0.1",
+    "node-cron": "^4.2.0",
+    "pino": "^10.0.0",
+    "pino-pretty": "^13.1.2",
+    "pm2": "^6.0.13",
+    "socket.io": "^4.8.1",
+    "uuid": "^11.1.0",
+    "multer": "^1.4.5-lts.1"
+  }
+}

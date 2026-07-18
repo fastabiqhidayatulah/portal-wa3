@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Panel - Portal WA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        .nav-link { @apply px-4 py-2 text-sm rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-800 transition-all font-medium; }
+        .nav-link.active { @apply bg-teal-50 text-teal-700 font-semibold border border-teal-200/50 shadow-sm shadow-teal-500/5; }
+        .card { @apply bg-white p-6 rounded-2xl border border-slate-200/70 shadow-sm hover:shadow-md transition-all duration-300; }
+        #server-log { font-family: 'JetBrains Mono', monospace; height: 420px; }
+    </style>
+</head>
+<body class="bg-slate-50/50 text-slate-700 min-h-screen">
+
+    <header class="bg-white/80 backdrop-blur-lg border-b border-slate-200/80 sticky top-0 z-10">
+        <nav class="container mx-auto px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                 <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-600 to-emerald-500 flex items-center justify-center shadow-md shadow-teal-600/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-800 leading-none">Portal WA</h1>
+                    <p class="text-[10px] text-teal-600 font-semibold uppercase tracking-wider mt-1">Nusa Edition</p>
+                </div>
+            </div>
+            <div class="flex items-center flex-wrap justify-center gap-1.5">
+                <a href="/" class="nav-link active">Utama</a>
+                <a href="/validator.html" class="nav-link">Validator</a>
+                <a href="/send.html" class="nav-link">Kirim</a>
+                <a href="/docs.html" class="nav-link">Docs</a>
+                <a href="/settings.html" class="nav-link">Pengaturan</a>
+                <a href="/logout" class="px-4 py-2 text-sm rounded-lg font-semibold bg-red-50 text-red-600 hover:bg-red-100 transition-all ml-2">Logout</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Sidebar Columns -->
+        <div class="lg:col-span-1 space-y-6">
+            <!-- Connection Status -->
+            <div class="card bg-white relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-teal-500 to-emerald-400"></div>
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Status Koneksi</h2>
+                    <span class="flex h-3 w-3 relative">
+                        <span id="status-pulse" class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"></span>
+                        <span id="status-dot" class="relative inline-flex rounded-full h-3 w-3"></span>
+                    </span>
+                </div>
+                <div id="status-box" class="p-4 rounded-xl transition-colors duration-300 text-center">
+                    <p id="status" class="font-semibold text-lg">Menghubungkan...</p>
+                </div>
+                
+                <div id="qr-container" class="mt-6 flex flex-col items-center justify-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                    <!-- QR Code will load here inside active state -->
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card bg-white relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1.5 bg-slate-200"></div>
+                <h2 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Aksi Kontrol</h2>
+                <div class="space-y-3">
+                    <button id="logout-wa-btn" class="w-full bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/50 px-4 py-3 rounded-xl font-semibold transition-all duration-200 shadow-sm flex items-center justify-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                        </svg>
+                        <span>Hapus Sesi & Restart WA</span>
+                    </button>
+                    <p class="text-xs text-slate-400 text-center mt-2 leading-relaxed">
+                        Aksi ini akan membersihkan semua data sesi lokal WhatsApp dan me-restart proses bot di server background.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Log Panel -->
+        <div class="lg:col-span-2 card bg-slate-900 border-none p-0 overflow-hidden shadow-xl flex flex-col min-h-[500px]">
+            <!-- Terminal Header -->
+            <div class="bg-slate-800 px-5 py-3.5 flex items-center justify-between border-b border-slate-700/50">
+                <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                    <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                    <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                    <span class="text-xs font-semibold text-slate-400 font-mono ml-2">live-log@portal-wa</span>
+                </div>
+                <button onclick="clearLogs()" class="text-xs text-slate-400 hover:text-slate-200 bg-slate-700/50 hover:bg-slate-700 px-2.5 py-1 rounded border border-slate-600/40 transition-colors font-mono">
+                    Clear Terminal
+                </button>
+            </div>
+            <!-- Log Output -->
+            <pre id="server-log" class="flex-1 w-full p-6 m-0 overflow-y-auto text-slate-300 text-sm leading-relaxed whitespace-pre-wrap font-mono"></pre>
+        </div>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const statusEl = document.getElementById('status');
+        const statusBox = document.getElementById('status-box');
+        const statusPulse = document.getElementById('status-pulse');
+        const statusDot = document.getElementById('status-dot');
+        const qrContainer = document.getElementById('qr-container');
+        const logContainer = document.getElementById('server-log');
+
+        socket.on('status', (data) => {
+            statusEl.textContent = data.status;
+            
+            if (data.status.includes('Terhubung')) {
+                // Connected State
+                statusBox.className = 'p-4 rounded-xl bg-teal-50 text-teal-800 border border-teal-100/80 text-center';
+                statusPulse.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75';
+                statusDot.className = 'relative inline-flex rounded-full h-3 w-3 bg-teal-500';
+            } else if (data.status.includes('Menunggu') || data.status.includes('Scan')) {
+                // Warning / Pending State
+                statusBox.className = 'p-4 rounded-xl bg-amber-50 text-amber-800 border border-amber-100/80 text-center';
+                statusPulse.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75';
+                statusDot.className = 'relative inline-flex rounded-full h-3 w-3 bg-amber-500';
+            } else {
+                // Disconnected or Error State
+                statusBox.className = 'p-4 rounded-xl bg-rose-50 text-rose-800 border border-rose-100/80 text-center';
+                statusPulse.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75';
+                statusDot.className = 'relative inline-flex rounded-full h-3 w-3 bg-rose-500';
+            }
+
+            if (data.qr) {
+                qrContainer.style.display = 'flex';
+                qrContainer.innerHTML = `
+                    <p class="text-xs text-slate-500 mb-3 font-semibold uppercase tracking-wider text-center">Scan QR Code dengan WhatsApp Anda</p>
+                    <div class="p-3 bg-white rounded-2xl border border-slate-200/60 shadow-sm">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(data.qr)}" alt="QR Code" class="rounded-lg shadow-sm">
+                    </div>
+                `;
+            } else {
+                qrContainer.style.display = 'none';
+                qrContainer.innerHTML = '';
+            }
+        });
+
+        socket.on('log', (message) => {
+            // Check scroll state
+            const isScrolledToBottom = logContainer.scrollHeight - logContainer.clientHeight <= logContainer.scrollTop + 30;
+            
+            // Log formatting with colors
+            let formattedMsg = message;
+            if (message.includes('Error') || message.includes('error') || message.includes('Gagal')) {
+                formattedMsg = `<span class="text-rose-400">${message}</span>`;
+            } else if (message.includes('Terhubung') || message.includes('berhasil')) {
+                formattedMsg = `<span class="text-teal-400">${message}</span>`;
+            } else if (message.includes('Menerima') || message.includes('dijadwalkan')) {
+                formattedMsg = `<span class="text-cyan-400">${message}</span>`;
+            }
+
+            logContainer.innerHTML += formattedMsg + '\n';
+            
+            if (isScrolledToBottom) {
+                logContainer.scrollTop = logContainer.scrollHeight;
+            }
+        });
+
+        function clearLogs() {
+            logContainer.innerHTML = '<span class="text-slate-500">// Terminal cleared by user. Waiting for logs...</span>\n';
+        }
+
+        document.getElementById('logout-wa-btn').addEventListener('click', async () => {
+            if (confirm('Anda yakin ingin logout dari WhatsApp dan menghapus sesi? Ini akan me-restart server.')) {
+                try {
+                    const response = await fetch('/api/internal/logout-wa', { method: 'POST', credentials: 'include' });
+                    const result = await response.json();
+                    alert(result.message);
+                } catch (error) { alert('Gagal melakukan logout: ' + error.message); }
+            }
+        });
+    </script>
+</body>
+</html>
