@@ -153,13 +153,20 @@
     </main>
 
     <script>
+    const handleAuthFailure = (message = 'Sesi login habis. Silakan login ulang dari halaman utama.') => {
+        showStatus(message, true);
+        setTimeout(() => {
+            window.location.href = '/login.html';
+        }, 1200);
+    };
+
     async function fetchGroups() {
         try {
             const res = await fetch('/api/internal/get-groups', { credentials: 'include' });
             if (!res.ok) {
                 const data = await res.json().catch(() => ({}));
                 if (res.status === 401 || res.status === 403) {
-                    showStatus('Sesi login habis. Silakan login ulang dari halaman utama.', true);
+                    handleAuthFailure();
                 } else {
                     showStatus(data.error || 'Gagal memuat daftar grup.', true);
                 }
@@ -208,7 +215,13 @@
         try {
             const res = await fetch('/api/internal/send-media', { method: 'POST', body: form, credentials: 'include' });
             const data = await res.json().catch(() => ({}));
-            if (!res.ok) throw new Error(data.error || 'Gagal mengirim berkas.');
+            if (!res.ok) {
+                if (res.status === 401 || res.status === 403) {
+                    handleAuthFailure();
+                    return;
+                }
+                throw new Error(data.error || 'Gagal mengirim berkas.');
+            }
             showStatus(data.message || 'Berkas berhasil terkirim ke target.', false);
         } catch (e) { showStatus('Gagal: ' + e.message, true); }
     });
@@ -228,7 +241,13 @@
         try {
             const res = await fetch('/api/internal/send-media-url', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ personalTargets, groupId, url, caption }), credentials: 'include' });
             const data = await res.json().catch(() => ({}));
-            if (!res.ok) throw new Error(data.error || 'Gagal mengirim tautan.');
+            if (!res.ok) {
+                if (res.status === 401 || res.status === 403) {
+                    handleAuthFailure();
+                    return;
+                }
+                throw new Error(data.error || 'Gagal mengirim tautan.');
+            }
             showStatus(data.message || 'Berkas via URL berhasil terkirim ke target.', false);
         } catch (e) { showStatus('Gagal: ' + e.message, true); }
     });
@@ -257,7 +276,13 @@
                 credentials: 'include'
             });
             const data = await res.json().catch(() => ({}));
-            if (!res.ok) throw new Error(data.error || 'Gagal mengirim pesan teks.');
+            if (!res.ok) {
+                if (res.status === 401 || res.status === 403) {
+                    handleAuthFailure();
+                    return;
+                }
+                throw new Error(data.error || 'Gagal mengirim pesan teks.');
+            }
             showStatus(data.message || 'Pesan teks berhasil dikirim.', false);
         } catch (e) {
             showStatus('Gagal: ' + e.message, true);
